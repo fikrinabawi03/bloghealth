@@ -5,7 +5,7 @@ import { blogPosts } from '../data/posts';
 import { NoiseOverlay } from '../components/NoiseOverlay';
 import { ComicArticle } from '../components/ComicArticle';
 import { CommentableContent } from '../components/CommentableContent';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 
 export const ArticlePage = () => {
     const { id } = useParams();

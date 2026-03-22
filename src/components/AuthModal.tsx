@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, Chrome, User as UserIcon } from 'lucide-react';
-import { useAuth, User } from '../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 interface AuthModalProps {
     isOpen: boolean;
