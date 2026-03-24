@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { auth, db } from '../lib/firebase';
-import { onAuthStateChanged, signOut, User as FirebaseUser } from 'firebase/auth';
+import { onAuthStateChanged, signOut, getRedirectResult, User as FirebaseUser } from 'firebase/auth';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 
 export interface User {
@@ -24,23 +24,36 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        // Handle redirect result from Google/Microsoft login
+        getRedirectResult(auth).catch((error) => {
+            console.error("Redirect login error:", error);
+            if (error.code !== 'auth/redirect-cancelled-by-user') {
+                alert("Login error: " + error.message);
+            }
+        });
+
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser: FirebaseUser | null) => {
             if (firebaseUser) {
-                // Fetch extra user details from Firestore
-                const userDocRef = doc(db, 'users', firebaseUser.uid);
-                const userDoc = await getDoc(userDocRef);
-                
                 let username = firebaseUser.displayName || firebaseUser.email?.split('@')[0] || 'User';
                 
-                if (userDoc.exists()) {
-                    username = userDoc.data().username || username;
-                } else {
-                    // Create user document if it doesn't exist
-                    await setDoc(userDocRef, {
-                        username,
-                        email: firebaseUser.email,
-                        createdAt: Date.now()
-                    }, { merge: true });
+                try {
+                    // Fetch extra user details from Firestore
+                    const userDocRef = doc(db, 'users', firebaseUser.uid);
+                    const userDoc = await getDoc(userDocRef);
+                    
+                    if (userDoc.exists()) {
+                        username = userDoc.data().username || username;
+                    } else {
+                        // Create user document if it doesn't exist
+                        await setDoc(userDocRef, {
+                            username,
+                            email: firebaseUser.email,
+                            createdAt: Date.now()
+                        }, { merge: true });
+                    }
+                } catch (error) {
+                    console.error("Error accessing Firestore user doc:", error);
+                    // Database failed, but user is authenticated in Firebase Auth
                 }
 
                 setUser({

@@ -7,7 +7,7 @@ import {
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
     OAuthProvider,
-    signInWithPopup,
+    signInWithRedirect,
     updateProfile 
 } from 'firebase/auth';
 
@@ -25,24 +25,26 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleGoogleLogin = async () => {
+        setIsLoading(true);
         try {
             const provider = new GoogleAuthProvider();
-            await signInWithPopup(auth, provider);
-            onClose();
+            await signInWithRedirect(auth, provider);
         } catch (error) {
             console.error("Google login error:", error);
             alert("Google login error: " + (error as any).message);
+            setIsLoading(false);
         }
     };
 
     const handleMicrosoftLogin = async () => {
+        setIsLoading(true);
         try {
             const provider = new OAuthProvider('microsoft.com');
-            await signInWithPopup(auth, provider);
-            onClose();
+            await signInWithRedirect(auth, provider);
         } catch (error) {
             console.error("Microsoft login error:", error);
             alert("Microsoft login error: " + (error as any).message);
+            setIsLoading(false);
         }
     };
 
