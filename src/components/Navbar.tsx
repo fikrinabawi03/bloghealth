@@ -73,8 +73,12 @@ export const Navbar = () => {
                                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                                 className="flex items-center gap-3 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full py-1.5 pl-1.5 pr-4 transition-all"
                             >
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-aurora-teal to-aurora-purple flex items-center justify-center text-white text-xs font-bold">
-                                    {user?.username.charAt(0).toUpperCase()}
+                                <div className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-tr from-aurora-teal to-aurora-purple flex items-center justify-center text-white text-xs font-bold overflow-hidden">
+                                    {user?.avatar ? (
+                                        <img src={user.avatar} alt={user.username} className="w-full h-full object-cover" />
+                                    ) : (
+                                        user?.username?.charAt(0).toUpperCase()
+                                    )}
                                 </div>
                                 <span className="text-sm font-medium text-white/90">{user?.username}</span>
                             </button>
@@ -116,9 +120,13 @@ export const Navbar = () => {
                     ) : (
                         <button
                             onClick={() => setIsProfileOpen(!isProfileOpen)}
-                            className="w-8 h-8 rounded-full bg-gradient-to-tr from-aurora-teal to-aurora-purple flex items-center justify-center text-white text-xs font-bold"
+                            className="w-8 h-8 flex-shrink-0 rounded-full bg-gradient-to-tr from-aurora-teal to-aurora-purple flex items-center justify-center text-white text-xs font-bold overflow-hidden"
                         >
-                            {user?.username.charAt(0).toUpperCase()}
+                            {user?.avatar ? (
+                                <img src={user.avatar} alt={user.username} className="w-full h-full object-cover" />
+                            ) : (
+                                user?.username?.charAt(0).toUpperCase()
+                            )}
                         </button>
                     )}
                     
