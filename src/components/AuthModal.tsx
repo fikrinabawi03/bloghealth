@@ -6,7 +6,6 @@ import {
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
     GoogleAuthProvider,
-    OAuthProvider,
     signInWithRedirect,
     updateProfile 
 } from 'firebase/auth';
@@ -32,18 +31,6 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
         } catch (error) {
             console.error("Google login error:", error);
             alert("Google login error: " + (error as any).message);
-            setIsLoading(false);
-        }
-    };
-
-    const handleMicrosoftLogin = async () => {
-        setIsLoading(true);
-        try {
-            const provider = new OAuthProvider('microsoft.com');
-            await signInWithRedirect(auth, provider);
-        } catch (error) {
-            console.error("Microsoft login error:", error);
-            alert("Microsoft login error: " + (error as any).message);
             setIsLoading(false);
         }
     };
@@ -116,13 +103,6 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
                                     >
                                         <Chrome className="w-5 h-5 text-red-500" />
                                         Continue with Google
-                                    </button>
-                                    <button 
-                                        onClick={handleMicrosoftLogin}
-                                        className="w-full flex items-center justify-center gap-3 py-3 px-4 bg-[#00a4ef] text-white font-medium rounded-xl hover:bg-[#00a4ef]/90 transition-colors"
-                                    >
-                                        <svg viewBox="0 0 23 23" className="w-5 h-5 fill-current"><path d="M0 0h11v11H0zM12 0h11v11H12zM0 12h11v11H0zM12 12h11v11H12z"/></svg>
-                                        Continue with Microsoft
                                     </button>
                                 </div>
                             )}
