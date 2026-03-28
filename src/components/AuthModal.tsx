@@ -24,6 +24,7 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleGoogleLogin = async () => {
+        return; // Locked: Prevent Firebase interaction
         setIsLoading(true);
         try {
             const provider = new GoogleAuthProvider();
@@ -37,6 +38,7 @@ export const AuthModal = ({ isOpen, onClose }: AuthModalProps) => {
 
     const handleEmailSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        return; // Locked: Prevent Firebase interaction
         setIsLoading(true);
         try {
             if (mode === 'signup') {
